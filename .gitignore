@@ -1,0 +1,4 @@
+*.suo
+TrampolineTimer/TrampolineTimer/bin/*
+TrampolineTimer/TrampolineTimer/obj/*
+Thumbs.db

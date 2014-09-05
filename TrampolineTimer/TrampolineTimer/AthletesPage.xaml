@@ -1,0 +1,56 @@
+﻿<Page x:Class="TrampolineTimer.AthletesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="320" d:DesignWidth="480"
+	WindowTitle="Athletes - Trampoline Timer">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock FontSize="26" Margin="0,0,0,10" Text="{Binding GymName}" TextAlignment="Center" VerticalAlignment="Top" />
+
+        <TextBlock FontSize="20" Grid.Row="1" Margin="0,0,0,15" Text="{Binding GymLocation}" TextAlignment="Center" VerticalAlignment="Top" />
+
+        <ItemsControl Grid.Row="2" Name="athletesControl" ItemsSource="{Binding Athletes}" Padding="10,0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border MouseLeftButtonDown="Athlete_Click" CornerRadius="5" Margin="0,0,0,10" BorderThickness="1" BorderBrush="Black" Padding="5" Cursor="Hand">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--The 'IsHitTestVisible' allows the entire box to be clicked rather than just certain portions. -->
+                            <StackPanel Orientation="Horizontal">
+                                <!--Different hackish way of displaying two text bindings next to each other.-->
+                                <TextBlock Cursor="Hand" Text="{Binding FirstName}" FontSize="16" />
+                                <TextBlock Cursor="Hand" Margin="5,0,0,0" Text="{Binding LastName}" FontSize="16" />
+                            </StackPanel>
+
+                            <TextBlock Cursor="Hand" Grid.Row="1" Grid.Column="0" Text="{Binding Age}" />
+                            <TextBlock Cursor="Hand" Grid.Row="1" Grid.Column="1" Text="{Binding Weight}" />
+                            <TextBlock Cursor="Hand" Grid.Row="1" Grid.Column="2" Text="{Binding Height}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</Page>
