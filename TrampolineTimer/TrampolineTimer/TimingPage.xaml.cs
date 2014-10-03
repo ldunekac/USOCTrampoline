@@ -111,7 +111,7 @@ namespace TrampolineTimer {
             ((App)App.Current).NewJump -= TimingPage_NewJump;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void controlButton_Click(object sender, RoutedEventArgs e)
         {
             if (controlButton.Content.Equals("Replay"))
             {
@@ -126,6 +126,7 @@ namespace TrampolineTimer {
                     DBAdapter.Instance.SaveSession(Session);
                     existingSession = true;
                     controlButton.Content = "Replay";
+                    backButton.IsEnabled = true;
                 }
                 else
                 {
@@ -138,8 +139,20 @@ namespace TrampolineTimer {
                     recording = true;
                     controlButton.Content = "Stop";
                     Session.StartTime = DateTime.Now;
+                    backButton.IsEnabled = false;
                 }
             }
+
+        }
+
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+            form.StopCapturing();
+            form.StopVideoPlayback();
+            form.Dispose();
+
+            var p = new AthletesPage();
+            this.NavigationService.Navigate(p);
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

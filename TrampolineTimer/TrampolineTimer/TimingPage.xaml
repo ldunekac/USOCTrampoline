@@ -79,6 +79,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         
-        <Button Content="Start" Grid.Column="0" Grid.Row="5" Padding="15,5" HorizontalAlignment="Center" Grid.ColumnSpan="2" Click="Button_Click" Name="controlButton" Margin="0,15,0,0" />
+        <Button Content="Start" Grid.Column="0" Grid.Row="5" Padding="15,5" HorizontalAlignment="Center" Grid.ColumnSpan="2" Click="controlButton_Click" Name="controlButton" Margin="0,15,0,0" />
+        <Button Content="Back" Grid.Column="0" Grid.Row="5" Padding="15,5" HorizontalAlignment="Right" Grid.ColumnSpan="2" Click="backButton_Click" Name="backButton" Margin="0,15,0,0" />
     </Grid>
 </Page>

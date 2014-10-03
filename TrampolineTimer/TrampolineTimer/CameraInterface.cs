@@ -142,7 +142,11 @@ namespace TrampolineTimer
         public void StopCapturing()
         {
             // If capture is currently going, stop it
-            if (capture != null) capture.Stop();
+            if (capture != null) {
+                capture.Stop();
+                capture.Dispose();
+            }
+            StopVideoPlayback();
             // Clear the panels controls
             cameraPanel.Controls.Clear();
         }
@@ -177,12 +181,15 @@ namespace TrampolineTimer
         /**
          * Stop video review playback
          */
-        private void StopVideoPlayback(object sender, System.EventArgs e)
+        public void StopVideoPlayback()
         {
             if (replayVideo != null)
             {
                 // If video isn't null, stop playing back
                 replayVideo.Stop();
+                replayVideo.Dispose();
+                capture.Stop();
+                capture.Dispose();
             }
         }
 

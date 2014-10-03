@@ -25,6 +25,7 @@ namespace TrampolineTimer
         internal List<Athlete> athletes = new List<Athlete>();
         public string gymName;
         public string gymLocation;
+        private bool _setupComplete = false;
 
         public GettingStartedPage()
         {
@@ -33,18 +34,39 @@ namespace TrampolineTimer
             StartAthleteGrid();
 
             Debug.WriteLine(gymLocationTextBox.GetType().Namespace);
+           
+            gymNameTextBox.Text = DBAdapter.Instance.GymName;
+            gymName = DBAdapter.Instance.GymName;
+            gymLocationTextBox.Text = DBAdapter.Instance.GymLocation;
+            gymLocation = DBAdapter.Instance.GymLocation;
+            
             gymNameTextBox.TextChanged += (sender, e) => gymName = gymNameTextBox.Text;
             gymLocationTextBox.TextChanged += (sender, e) => gymLocation = gymLocationTextBox.Text;
+            _setupComplete = true;
         }
 
         private void StartCoachGrid() {
+            var coachTable = DBAdapter.Instance.Coaches;
+
+            foreach (var coach in coachTable)
+            {
+                coaches.Add(coach);
+                addCoachEntriesFor(coach);
+            }
             coaches.Add(new Coach());
-            addCoachEntriesFor(coaches[0]);
+            addCoachEntriesFor(coaches[coaches.Count - 1]);
+
         }
 
         private void StartAthleteGrid() {
+            var athleteTalbe = DBAdapter.Instance.Athletes;
+            foreach (var athlete in athleteTalbe) {
+                athletes.Add(athlete);
+                addAthleteEntriesFor(athlete);
+            }
+
             athletes.Add(new Athlete());
-            addAthleteEntriesFor(athletes[0]);
+            addAthleteEntriesFor(athletes[athletes.Count - 1]);
         }
 
         // The following two methods implement automatically growing data entry grids.
@@ -66,6 +88,11 @@ namespace TrampolineTimer
             coachesGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
             Grid.SetRow(firstNameEntry, coachesGrid.RowDefinitions.Count - 1);
             Grid.SetRow(lastNameEntry, coachesGrid.RowDefinitions.Count - 1);
+
+            if (!coach.IsEmpty) {
+                firstNameEntry.Text = coach.FirstName;
+                lastNameEntry.Text = coach.LastName;
+            }
 
             coachesGrid.Children.Add(firstNameEntry);
             coachesGrid.Children.Add(lastNameEntry);
@@ -114,6 +141,14 @@ namespace TrampolineTimer
             Grid.SetRow(weightEntry, athletesGrid.RowDefinitions.Count - 1);
             Grid.SetRow(heightEntry, athletesGrid.RowDefinitions.Count - 1);
 
+            if (!athlete.IsEmpty) {
+                firstNameEntry.Text = athlete.FirstName;
+                lastNameEntry.Text = athlete.LastName;
+                ageEntry.Text = athlete.Age;
+                weightEntry.Text = athlete.Weight;
+                heightEntry.Text = athlete.Height;
+            }
+
             athletesGrid.Children.Add(firstNameEntry);
             athletesGrid.Children.Add(lastNameEntry);
             athletesGrid.Children.Add(ageEntry);
@@ -122,6 +157,7 @@ namespace TrampolineTimer
         }
 
         private void ensureEmptyAthleteEntry() {
+            if (!_setupComplete) return;
             if (athletes.Any(c => c.IsEmpty)) return;
 
             var athlete = new Athlete();
@@ -130,6 +166,7 @@ namespace TrampolineTimer
         }
 
         private void ensureEmptyCoachEntry() {
+            if (!_setupComplete) return;
             if (coaches.Any(c => c.IsEmpty)) return;
 
             var coach = new Coach();
@@ -139,10 +176,10 @@ namespace TrampolineTimer
 
         private void doneButton_Click(object sender, RoutedEventArgs e) {
             // Done, save to the database and move to the athletes page
-            DBAdapter.Instance.InsertIntoGymTable(gymName, gymLocation);
-            DBAdapter.Instance.InsertIntoAthletesTable(new List<Athlete>(athletes.Where(c => !c.IsEmpty)));
-            DBAdapter.Instance.InsertIntoCoachesTable(new List<Coach>(coaches.Where(c => !c.IsEmpty)));
-
+            DBAdapter.Instance.UpdateGymTable(gymName, gymLocation);
+            DBAdapter.Instance.UpdateAthletesTable(new List<Athlete>(athletes.Where(c => !c.IsEmpty)));
+            DBAdapter.Instance.UpdateCoachesTable(new List<Coach>(coaches.Where(c => !c.IsEmpty)));
+        
             var p = new AthletesPage();
             this.NavigationService.Navigate(p);
         }

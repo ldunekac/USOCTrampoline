@@ -38,5 +38,11 @@ namespace TrampolineTimer {
             var p = new TimingPage(athlete);
             this.NavigationService.Navigate(p);
         }
+
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+            var p = new GettingStartedPage();
+            this.NavigationService.Navigate(p);
+        }
     }
 }

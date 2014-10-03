@@ -18,13 +18,15 @@ namespace TrampolineTimer
 
         private static string CreateAthletesTableString = @"CREATE TABLE IF NOT EXISTS Athletes(Id integer primary key, firstName varchar(255), lastName varchar(255), age varchar(255), height varchar(255), weight varchar(255))";
         private static string SelectAllFromAthletesTableString = @"SELECT * FROM Athletes";
+        private static string UpdateAthleteInTableString = @"UPDATE Athletes SET firstName = @firstName, lastName = @lastName, age = @age, height = @height, weight = @weight WHERE Id = @id";
 
         private static string CreateCoachesTableString = @"CREATE TABLE IF NOT EXISTS Coaches(Id integer primary key, firstName varchar(255), lastName varchar(255))";
+        private static string UpdateCoachInTableString = @"UPDATE Coaches SET firstName = @firstName, lastName = @lastName WHERE id = @id";
 
         private static string SelectAllFromCoachesTableString = @"SELECT * FROM Coaches";
 
         private static string CreateGymTableString = "CREATE TABLE IF NOT EXISTS Gym(Id integer primary key, gymName varchar(255), location varchar(255))";
-        private static string InsertGymTableString = "INSERT INTO Gym(Id, gymName, location) VALUES (@Id, @gymName, @location)";
+        private static string InsertGymTableString = "INSERT OR REPLACE INTO Gym(Id, gymName, location) VALUES (@Id, @gymName, @location)";
         private static string SelectGymTableString = "SELECT {0} FROM Gym";
 
         private static string CreateSessionsTableString = "CREATE TABLE IF NOT EXISTS Sessions(Id integer primary key, athleteId integer, coachId integer, startTime datetime, videoFilename string);";
@@ -113,6 +115,52 @@ namespace TrampolineTimer
             }
         }
 
+        public void UpdateAthletesTable(List<Athlete> athletes)
+        {
+            List<Athlete> newAthletes = new List<Athlete>();
+            var athletesInTable = SelectFromAthletesTable();
+            foreach (var athlete in athletes)
+            {
+                bool foundInTable = false;
+                foreach(var tableAthlete in athletesInTable)
+                {
+                    if (tableAthlete.Id == athlete.Id)
+                    {
+                        UpdateAthleteInTable(athlete);
+                        foundInTable = true;
+                        break;
+                    }
+                }
+                if (!foundInTable)
+                {
+                    newAthletes.Add(athlete);
+                }
+            }
+
+            if (newAthletes.Count > 0)
+            {
+                InsertIntoAthletesTable(newAthletes);
+            }
+        }
+
+        private void UpdateAthleteInTable(Athlete athlete)
+        {
+            using (var conn = GetConnection())
+            { 
+                SQLiteCommand UpdateTableCommand = conn.CreateCommand();
+                UpdateTableCommand.CommandText = UpdateAthleteInTableString;
+
+                UpdateTableCommand.Parameters.AddWithValue("@firstName", athlete.FirstName);
+                UpdateTableCommand.Parameters.AddWithValue("@lastName", athlete.LastName);
+                UpdateTableCommand.Parameters.AddWithValue("@age", athlete.Age);
+                UpdateTableCommand.Parameters.AddWithValue("@height", athlete.Height);
+                UpdateTableCommand.Parameters.AddWithValue("@weight", athlete.Weight);
+                UpdateTableCommand.Parameters.AddWithValue("@id", athlete.Id);
+
+                UpdateTableCommand.ExecuteNonQuery();
+            }
+        }
+
         private List<Athlete> SelectFromAthletesTable()
         {
             List<Athlete> athletes = new List<Athlete>();
@@ -152,6 +200,50 @@ namespace TrampolineTimer
             }
         }
 
+        public void UpdateCoachesTable(List<Coach> coaches)
+        {
+            List<Coach> newCoaches = new List<Coach>();
+            var coachesInTable = SelectFromCoachesTable();
+            foreach (var coach in coaches)
+            {
+                bool foundInTable = false;
+                foreach (var tableCoach in coachesInTable)
+                {
+                    if (tableCoach.Id == coach.Id)
+                    {
+                        UpdateCoachInTable(coach);
+                        foundInTable = true;
+                        break;
+                    }
+                }
+                if (!foundInTable)
+                {
+                    newCoaches.Add(coach);
+                }
+            }
+
+            if (newCoaches.Count > 0)
+            {
+                InsertIntoCoachesTable(newCoaches);
+            }
+        }
+
+        private void UpdateCoachInTable(Coach coach)
+        {
+
+            using (var conn = GetConnection())
+            {
+                SQLiteCommand UpdateTableCommand = conn.CreateCommand();
+                UpdateTableCommand.CommandText = UpdateCoachInTableString;
+
+                UpdateTableCommand.Parameters.AddWithValue("@firstName", coach.FirstName);
+                UpdateTableCommand.Parameters.AddWithValue("@lastName", coach.LastName);
+                UpdateTableCommand.Parameters.AddWithValue("@id", coach.Id);
+
+                UpdateTableCommand.ExecuteNonQuery();
+            }
+        }
+
         public void InsertIntoCoachesTable(List<Coach> coaches)
         {
 
@@ -166,6 +258,7 @@ namespace TrampolineTimer
                 }
             }
         }
+
 
         private List<Coach> SelectFromCoachesTable()
         {
@@ -203,9 +296,9 @@ namespace TrampolineTimer
             }
         }
 
-        public void InsertIntoGymTable(String name, String location)
+        public void UpdateGymTable(String name, String location)
         {
-
+            CreateGymTable();
             using (var conn = GetConnection())
             {
                 SQLiteCommand InsertTableCommand = conn.CreateCommand();
