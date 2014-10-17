@@ -35,7 +35,7 @@ namespace TrampolineTimer {
             // Fails less quietly, with much gurgling and feet-kicking
             if (athlete == null) return;
 
-            var p = new TimingPage(athlete);
+            var p = new SkillsPage(athlete);
             this.NavigationService.Navigate(p);
         }
 

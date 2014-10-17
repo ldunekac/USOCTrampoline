@@ -110,6 +110,8 @@
     </Compile>
     <Compile Include="Data\Jump.cs" />
     <Compile Include="Data\Session.cs" />
+    <Compile Include="Data\Skill.cs" />
+    <Compile Include="Data\SkillList.cs" />
     <Compile Include="DBAdapter.cs" />
     <Compile Include="Data\Athlete.cs" />
     <Compile Include="Data\Coach.cs" />
@@ -121,6 +123,9 @@
     </Compile>
     <Compile Include="GettingStartedPage.xaml.cs">
       <DependentUpon>GettingStartedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SkillsPage.xaml.cs">
+      <DependentUpon>SkillsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimerWindow.xaml.cs">
       <DependentUpon>TimerWindow.xaml</DependentUpon>
@@ -156,7 +161,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -191,6 +198,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GettingStartedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SkillsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
