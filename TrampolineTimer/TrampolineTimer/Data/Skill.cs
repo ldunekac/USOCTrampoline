@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TrampolineTimer.Data
 {
-    class Skill
+    public class Skill
     {
         public string figShortHand;
         public string name;
@@ -16,6 +16,12 @@ namespace TrampolineTimer.Data
             figShortHand = skillShorthand;
             name = skillNname;
             this.dd = dd;
+        }
+        
+        public Skill()
+        {
+            figShortHand = "";
+            name = "";
         }
     }
 }

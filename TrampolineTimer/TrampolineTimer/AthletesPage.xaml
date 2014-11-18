@@ -53,6 +53,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <StackPanel Grid.Column="1" Grid.Row="7" FlowDirection="RightToLeft" Orientation="Horizontal">
+            <Button Content="Search" Padding="5" Name="searchButton" Click="searchButton_Click" />
             <Button Content="Back" Padding="5" Name="backButton" Click="backButton_Click" />
         </StackPanel>
     </Grid>

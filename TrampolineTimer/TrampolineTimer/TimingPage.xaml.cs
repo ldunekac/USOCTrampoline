@@ -22,6 +22,7 @@ namespace TrampolineTimer {
     /// </summary>
     public partial class TimingPage : Page {
         public Session Session { get; private set; }
+        public List<Jump> jumpList;
         public List<Coach> Coaches
         {
             get
@@ -41,10 +42,11 @@ namespace TrampolineTimer {
             ((App)App.Current).NewJump += TimingPage_NewJump;
         }
 
-        public TimingPage(Data.Athlete athlete) : this()
+        public TimingPage(Data.Athlete athlete, List<Jump> jumpList) : this()
         {
             this.Session = new Session(athlete);
             existingSession = false;
+            this.jumpList = jumpList;
         }
 
         public TimingPage(Data.Session session)

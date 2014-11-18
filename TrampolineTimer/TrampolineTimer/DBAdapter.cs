@@ -29,8 +29,11 @@ namespace TrampolineTimer
         private static string InsertGymTableString = "INSERT OR REPLACE INTO Gym(Id, gymName, location) VALUES (@Id, @gymName, @location)";
         private static string SelectGymTableString = "SELECT {0} FROM Gym";
 
-        private static string CreateSessionsTableString = "CREATE TABLE IF NOT EXISTS Sessions(Id integer primary key, athleteId integer, coachId integer, startTime datetime, videoFilename string);";
-        private static string CreateSessionJumpsTableString = "CREATE TABLE IF NOT EXISTS SessionJumps(sessionId integer, start double, length double);";
+
+        private static string CreateSessionsTableString = "CREATE TABLE IF NOT EXISTS Sessions(Id integer primary key, athleteId integer, coachId integer, startTime datetime, videoFilename string, totalScore double);";
+        private static string SelectSessionsAthletesCoachesString = "SELECT * FROM Sessions INNER JOIN Athletes ON Sessions.athleteId == Athletes.Id INNER JOIN Coaches ON Sessions.CoachId == Coaches.Id";
+
+        private static string CreateSessionJumpsTableString = "CREATE TABLE IF NOT EXISTS SessionJumps(sessionId integer, start double, length double, trickName string, rotation interger, somersault interger, twist integer);";
         private static DBAdapter instance;
 
         private DBAdapter()
@@ -360,6 +363,7 @@ namespace TrampolineTimer
                 cmd.Parameters.AddWithValue("@coachId", session.Coach.Id);
                 cmd.Parameters.AddWithValue("@startTime", session.StartTime);
                 cmd.Parameters.AddWithValue("@videoFilename", session.VideoFilename);
+                cmd.Parameters.AddWithValue("@totalScore", session.score);
                 cmd.ExecuteNonQuery();
 
                 long sessionId = conn.LastInsertRowId;
@@ -374,6 +378,46 @@ namespace TrampolineTimer
                     cmd.Parameters.AddWithValue("@length", jump.Length);
                     cmd.ExecuteNonQuery();
                 }
+            }
+        }
+
+        public List<Session> SelectSessionAthleteCoach()
+        {
+            List<Session> sessions = new List<Session>();
+            using (var conn = GetConnection())
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = SelectSessionsAthletesCoachesString;
+
+
+
+                SQLiteDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Athlete athlete = new Athlete()
+                    {
+                        Id =  Convert.ToInt32(reader[1].ToString()),
+                        FirstName = reader[7].ToString(),
+                        LastName = reader[8].ToString(),
+                        Age = reader[9].ToString(),
+                        Height = reader[10].ToString(),
+                        Weight = reader[11].ToString()
+                    };
+                    Coach coach = new Coach()
+                    {
+                        Id = Convert.ToInt32(reader[2].ToString()),
+                        FirstName = reader[13].ToString(),
+                        LastName = reader[14].ToString()
+                    };
+                    Session s = new Session(athlete);
+                    s.Id = Convert.ToInt32(reader[0].ToString());
+                    s.Coach = coach;
+                    s.VideoFilename = reader[4].ToString();
+                    Console.WriteLine(reader[5].ToString());
+                    s.totalScore = 2.5;
+                    sessions.Add(s);
+                }
+                return sessions;
             }
         }
     }

@@ -44,5 +44,11 @@ namespace TrampolineTimer {
             var p = new GettingStartedPage();
             this.NavigationService.Navigate(p);
         }
+
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            var p = new SearchPage();
+            this.NavigationService.Navigate(p);
+        }
     }
 }

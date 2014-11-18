@@ -9,6 +9,10 @@ namespace TrampolineTimer.Data
     {
         public DateTime StartTime { get; set; }
         public double Length { get; set; }
+        public string  skillName { get; set; }
+        public int numberOfTwists { get; set; }
+        public int numberOfSommersaults {get; set;}
+        public int numberOfRotations { get; set; }
         public DateTime EndTime
         {
             get

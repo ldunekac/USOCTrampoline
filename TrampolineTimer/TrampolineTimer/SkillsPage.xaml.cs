@@ -23,19 +23,23 @@ namespace TrampolineTimer
     {
         private Athlete athlete;
         private SkillList skillList;
+        List<Jump> jumpList;
         public SkillsPage(Athlete athlete)
         {
             this.athlete = athlete;
             skillList = new SkillList();
+             jumpList = new List<Jump>();
             InitializeComponent();
 
             for (var i = 0; i < 10; i++)
             {
-                addSkillEntriesFor();
+                var jump = new Jump();
+                addSkillEntriesFor(jump);
+                jumpList.Add(jump);
             }
         }
 
-        private void addSkillEntriesFor(/*Skill skill */)
+        private void addSkillEntriesFor(Jump jump)
         {
             var figShortHand = new TextBox { Style = (Style)Resources["GridEntry"] };
             Grid.SetColumn(figShortHand, 0);
@@ -79,6 +83,7 @@ namespace TrampolineTimer
                 {
                     skillType.SelectedItem = skillType.Items[0];
                     skillType.Text = skillType.Items[0].ToString();
+                    jump.skillName = skillType.Items[0].ToString();
                 }
                 else
                 {
@@ -94,6 +99,7 @@ namespace TrampolineTimer
                 var selectedSkill = this.skillList.getSkillByName((sender as ComboBox).SelectedItem.ToString());
                 if (selectedSkill != null)
                 {
+                    jump.skillName = selectedSkill.name;
                     baseDD.Text = selectedSkill.dd.ToString();
                 }
                 total.Text = (toFloat(baseDD.Text) + toFloat(rotation.Text) * 0.1f + toFloat(sommersault.Text) * 0.1f + toFloat(twist.Text) * 0.1f).ToString();
@@ -101,16 +107,29 @@ namespace TrampolineTimer
 
             rotation.TextChanged += (sender, e) =>
             {
+                jump.numberOfRotations = Convert.ToInt32(rotation.Text);
                 total.Text = (toFloat(baseDD.Text) + toFloat(rotation.Text) * 0.1f + toFloat(sommersault.Text) * 0.1f + toFloat(twist.Text) * 0.1f).ToString();
             };
 
             sommersault.TextChanged += (sender, e) =>
             {
+                 int number;
+                 try
+                 {
+                     number = Convert.ToInt32(total.Text);
+                 }
+                 catch (FormatException)
+                 {
+                     number = 0;
+                 }
+                
+                jump.numberOfSommersaults = number;
                 total.Text = (toFloat(baseDD.Text) + toFloat(rotation.Text) * 0.1f + toFloat(sommersault.Text) * 0.1f + toFloat(twist.Text) * 0.1f).ToString();
             };
 
             twist.TextChanged += (sender, e) =>
             {
+                jump.numberOfTwists = Convert.ToInt32(twist.Text);
                 total.Text = (toFloat(baseDD.Text) + toFloat(rotation.Text) * 0.1f + toFloat(sommersault.Text) * 0.1f + toFloat(twist.Text) * 0.1f).ToString();
             };
 
@@ -149,7 +168,7 @@ namespace TrampolineTimer
 
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
-            var p = new TimingPage(athlete);
+            var p = new TimingPage(athlete, jumpList);
             this.NavigationService.Navigate(p);
         }
 

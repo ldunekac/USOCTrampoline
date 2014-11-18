@@ -124,6 +124,9 @@
     <Compile Include="GettingStartedPage.xaml.cs">
       <DependentUpon>GettingStartedPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SkillsPage.xaml.cs">
       <DependentUpon>SkillsPage.xaml</DependentUpon>
     </Compile>
@@ -198,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GettingStartedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -20,7 +20,6 @@ namespace TrampolineTimer {
             // Awkward way to deal with running becoming false while in ReadTime, feel free to refactor
             running = true;
             Returnvalue? data = null;
-
             while (running) {
                 App.Current.Dispatcher.BeginInvoke(new Action(() => {
                     // Checking for a timeout inside the VI

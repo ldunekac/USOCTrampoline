@@ -1,3 +1,6 @@
 [My Computer]
-My Computer = "138.67.236.125"
+My Computer = "172.22.11.1"
+
+[USOCmyRio]
+USOCmyRio = "172.22.11.2"
 
