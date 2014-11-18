@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>InteropAssembly</name>
+  </assembly>
+  <members>
+    <member name="M:InteropAssembly.LabVIEWExports.Stop">
+      <summary></summary>
+      <returns>Void</returns>
+    </member>
+    <member name="M:InteropAssembly.LabVIEWExports.ReadEvent">
+      <summary></summary>
+      <returns>InteropAssembly.Returnvalue</returns>
+    </member>
+    <member name="M:InteropAssembly.LabVIEWExports.DataReader">
+      <summary></summary>
+      <returns>Void</returns>
+    </member>
+  </members>
+</doc>
